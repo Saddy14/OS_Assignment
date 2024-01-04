@@ -1,47 +1,33 @@
-package NonPrePriority;
+package NonPreSJF;
+
 public class Process {
     
-    private static int pIdCounter;
-    private int pId;
+    private static int pIdCounter; 
+    private int pId; 
 
     private String pNumber;
     private int brustTime;
     private int arrivalTime;
     private int finishTime;
-    public void setFinishTime(int finishTime) {
-        this.finishTime = finishTime;
-    }
 
-    private int priority;
+    
     private int turnAroundTime; 
     private int waitingTime; 
+
     //Constructor for process object
     Process () {
 
         this.pId = pIdCounter++;
     }
     
-    Process(String pNumber, int brustTime, int arrivalTime, int priority) {
+    Process(String pNumber, int brustTime, int arrivalTime) { 
 
         this.pNumber = pNumber;
         this.brustTime = brustTime;
         this.arrivalTime = arrivalTime;
-
-        if (priority != 0)
-        this.priority = priority;
-        // this.turnAroundTime = turnAroundTime;
-        // this.waitingTime = waitingTime;
+        
         this.pId = pIdCounter++;
     }
-
-    // //! No Priority
-    // Process(String pNumber, int brustTime, int arrivalTime, int turnAroundTime, int waitingTime) {
-    //     this.pNumber = pNumber;
-    //     this.brustTime = brustTime;
-    //     this.arrivalTime = arrivalTime;
-    //     this.turnAroundTime = turnAroundTime;
-    //     this.waitingTime = waitingTime;
-    // }
 
     public String getpNumber() {
         return pNumber;
@@ -67,14 +53,6 @@ public class Process {
         this.arrivalTime = arrivalTime;
     }
 
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
     public int getTurnAroundTime() {
         return turnAroundTime;
     }
@@ -98,6 +76,10 @@ public class Process {
     public int getFinishTime() {
         return finishTime;
     }
+    
+    public void setFinishTime(int finishTime) {
+        this.finishTime = finishTime;
+    }
 
     // @Override
     // public String toString() {
@@ -108,7 +90,7 @@ public class Process {
 
      @Override
     public String toString() {
-        return "pNumber= " + pNumber + ", priority= " + priority + ", AT= " + arrivalTime + ", FT= " + finishTime + ", TAT= "
+        return "pNumber= " + pNumber + ", AT= " + arrivalTime + ", FT= " + finishTime + ", TAT= "
          + turnAroundTime; 
     }
     
@@ -121,3 +103,4 @@ public class Process {
     
 
 }
+

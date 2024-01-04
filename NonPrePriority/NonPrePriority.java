@@ -1,3 +1,4 @@
+package NonPrePriority;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -115,7 +116,7 @@ public class NonPrePriority {
 
     
 
-    private Queue<Process> sortByArrival(List<Process> pList, int totalBurst) {
+    private Queue<Process> sortByArrival(List<Process> pList, int totalBurst) { //Sort by Arrival Time
 
         queue.clear();
 
