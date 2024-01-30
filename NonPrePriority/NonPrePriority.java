@@ -6,35 +6,26 @@ import java.util.Queue;
 
 public class NonPrePriority {
 
-    private ArrayList<Process> pList;
-    private ArrayList<Process> pDone;
-    private int totalTurnAround;
-    private double avgTurnAround;
+    static ArrayList<Process> pList = new ArrayList<>();
+    
 
-    private int totalWaiting;
-    private double avgWaiting;
+    static ArrayList<Process> pDone = new ArrayList<>();
 
-    private int totalBurst;
+    static ArrayList<Process> CopypDone = new ArrayList<>();
 
-    private int howManyP = 6; 
+    static int totalTurnAround;
+    static double avgTurnAround;
 
-    Queue<Process> queue = new LinkedList<Process>(); 
-    // Queue<Process> queueAfterPrioritySort = new LinkedList<Process>(); //! Remove
-    // private List<Process> sortedPri = new ArrayList<>();
+    static int totalWaiting;
+    static double avgWaiting;
 
+    static int totalBurst;
+
+
+    static Queue<Process> queue = new LinkedList<Process>(); 
+    
     NonPrePriority() {
 
-        Menu mymenu= new Menu();
-        // howManyP = mymenu.howManyP();
-        pList = new ArrayList<>();
-        pDone = new ArrayList<>();
-        
-
-        // for (int i = 0; i < howManyP ; i++) {
-
-        //     myprocess.add(new Process(mymenu.setpNumber(), mymenu.setBrustTime(), mymenu.setArrivalTime(), mymenu.setPriority()));
-        //     myprocess.add(new Process());
-        // }
         pList.add(new Process("P0",6,0,3));
         pList.add(new Process("P1",4,1,3));
         pList.add(new Process("P2",6,5,1));
@@ -42,28 +33,20 @@ public class NonPrePriority {
         pList.add(new Process("P4",6,7,5));
         pList.add(new Process("P5",6,8,6));
 
-        // pList.add(new Process("P6",6,8,6));
-        // pList.add(new Process("P7",6,8,6));
-        // pList.add(new Process("P8",6,5,1));
-
-        // pList.add(new Process("P9",6,8,5));
-        // pList.add(new Process("P10",6,8,5));
-       
         
-
-        // System.out.println(mymenu.setpNumber());
-        // System.out.println(pList.get(0));
-        // sortByPriority(pList);
-        // System.out.println(pList);
         calTotalBrust(); //! Calculate Total Burst Time
         sortByArrival(pList, totalBurst); GanttChar.setSortAT(queue);
         magic();
         // System.out.println(pList);
         calTurnAround(); //Calculate TurnAround for each Process
         calTAT(); //Total & Avg TurnAround Time
+        waitingTime(); //Calculate Waiting Time for each Process
+        avgWaitingTime(); //Total & Avg Waiting Time
         System.out.println("\n"+pDone);
         System.out.println("TTAT: " + totalTurnAround + " Avg TAT: " + avgTurnAround);
 
+        CopypDone.addAll(pDone);
+        
         new GanttChar(pDone);
 
     }
@@ -193,7 +176,27 @@ public class NonPrePriority {
         avgTurnAround = totalTurnAround/(x); //!
     }
 
+    private void waitingTime() {
 
+        for (Process process : pDone) {
+            
+            process.setWaitingTime(process.getTurnAroundTime() - process.getBrustTime());
+        }
+    }
+
+    private void avgWaitingTime() { //Calculate Total Waiting Time
+
+        for (Process process : pDone) {
+            
+            totalWaiting += process.getWaitingTime();
+        }
+
+        double x = pDone.size(); //!
+        avgWaiting = totalWaiting/(x); //!
+
+        avgWaiting = Double.parseDouble(String.format("%.2f", avgWaiting));
+    
+    }
 
 }
 

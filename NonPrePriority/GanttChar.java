@@ -3,108 +3,153 @@ package NonPrePriority;
 import java.util.ArrayList;
 import java.util.Queue;
 
-public class GanttChar {
+// public class GanttChar {
     
-    private ArrayList<Process> allP = new ArrayList<>();
+//     private ArrayList<Process> allP = new ArrayList<>();
 
+//     private static ArrayList<Process> sortAT = new ArrayList<>();
+
+//     public static void setSortAT(Queue<Process> sortAT) {
+        
+//         GanttChar.sortAT.addAll(sortAT);
+//     }
+
+//     GanttChar(ArrayList<Process> p) {
+
+//         this.allP = p;
+//         System.out.println("\n");
+//         topLine();
+//         middleLine();
+//         topLine();
+//         bottomLine();
+//         // draw();
+//     }
+
+
+//     private void topLine() {
+
+//         System.out.print("+");
+//         for (int i = 0; i < allP.size(); i++) {
+            
+//             for (int j = 0; j < 10; j++) {
+                
+//                 System.out.print("-");
+//             }
+
+//             System.out.print("+");
+//         }
+       
+//     }
+
+//     private void middleLine() {
+
+//         System.out.print("\n");
+
+//         for (int i = 0; i < allP.size(); i++) {
+            
+//             System.out.print("| " + allP.get(i).getpNumber());
+
+//             for (int j = 0; j < 7; j++) {
+                
+//                 System.out.print(" ");
+//             }
+            
+//         }
+//         System.out.println("|");
+//     }
+
+//     private void bottomLine() {
+
+//         System.out.print("\nFT");
+
+//         for (int i = 0; i < allP.size(); i++) {
+            
+//             for (int j = 0; j < 9; j++) {
+                
+//                 System.out.print(" ");
+
+//             }
+
+//             System.out.print(allP.get(i).getFinishTime());
+//         }
+       
+//     }
+
+
+// }
+
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
+public class GanttChar extends JPanel {
+
+    private ArrayList<Process> allP = new ArrayList<>();
     private static ArrayList<Process> sortAT = new ArrayList<>();
+    private JTextArea textArea;
 
     public static void setSortAT(Queue<Process> sortAT) {
-        
         GanttChar.sortAT.addAll(sortAT);
     }
 
     GanttChar(ArrayList<Process> p) {
-
         this.allP = p;
-        System.out.println("\n");
-        topLine();
-        middleLine();
-        topLine();
-        bottomLine();
-        // draw();
+        textArea = new JTextArea(20, 50);
+        textArea.setEditable(false);
+        add(textArea);
+        draw();
+        // setBackground(java.awt.Color.BLACK);
+        // setForeground(java.awt.Color.WHITE);
+        
+        Gui.panel.add(this, java.awt.BorderLayout.SOUTH);
+
+        // Gui.cPanel.revalidate();
+        Gui.panel.revalidate();
     }
 
     private void draw() {
-
-        int size = allP.size() - 1;
-
-        do {
-
-        
-
-            
-        } while (size < 0);
-
+        StringBuilder sb = new StringBuilder();
+        sb.append(topLine());
+        sb.append(middleLine());
+        sb.append(topLine());
+        sb.append(bottomLine());
+        textArea.setText(sb.toString());
     }
 
-    private void topLine() {
-
-        System.out.print("+");
+    private String topLine() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("+");
         for (int i = 0; i < allP.size(); i++) {
-            
             for (int j = 0; j < 10; j++) {
-                
-                System.out.print("-");
+                sb.append("-");
             }
-
-            System.out.print("+");
+            sb.append("+");
         }
-       
+        sb.append("\n");
+        return sb.toString();
     }
 
-    private void middleLine() {
-
-        System.out.print("\n");
-
+    private String middleLine() {
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < allP.size(); i++) {
-            
-            System.out.print("| " + allP.get(i).getpNumber());
-
-            for (int j = 0; j < 7; j++) {
-                
-                System.out.print(" ");
-            }
-            
-        }
-        System.out.println("|");
-    }
-
-    private void bottomLine() {
-
-        System.out.print("\nFT");
-
-        for (int i = 0; i < allP.size(); i++) {
-            
+            sb.append("| " + allP.get(i).getpNumber());
             for (int j = 0; j < 9; j++) {
-                
-                System.out.print(" ");
-
+                sb.append(" ");
             }
-
-            System.out.print(allP.get(i).getFinishTime());
         }
-
-        //TODO Get Arrival Time
-        // System.out.println();
-        // for (int i = 0; i < sortAT.size(); i++) {
-            
-        //     for (int j = 0; j < sortAT.get(i).getArrivalTime()-4; j++) {
-                
-        //         System.out.print(" ");
-
-        //     }
-
-        //     System.out.print(sortAT.get(i).getpNumber());
-        // }
-
-        
-
-        // System.out.println(sortAT.size());
-
-
-       
+        sb.append("|\n");
+        return sb.toString();
     }
 
-
+    private String bottomLine() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nFT");
+        for (int i = 0; i < allP.size(); i++) {
+            for (int j = 0; j < 11; j++) {
+                sb.append(" ");
+            }
+            sb.append(allP.get(i).getFinishTime());
+        }
+        sb.append("\n");
+        return sb.toString();
+    }
 }

@@ -109,7 +109,7 @@ public class Process {
      @Override
     public String toString() {
         return "pNumber= " + pNumber + ", priority= " + priority + ", AT= " + arrivalTime + ", FT= " + finishTime + ", TAT= "
-         + turnAroundTime; 
+         + turnAroundTime + ", WT= " + waitingTime; 
     }
     
     public void pew() {
