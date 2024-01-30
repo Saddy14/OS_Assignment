@@ -35,6 +35,7 @@ public class PreemptiveSJF extends CPUScheduler {
                 System.out.println("2");
                         
             }
+            
             checkPreemptive(inputList);
             // If current process is finished, remove it
             if (currentProcess != null && currentProcess.getBurstTime() == 0) {
