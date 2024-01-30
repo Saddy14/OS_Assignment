@@ -44,6 +44,7 @@ public class View extends JFrame {
 		this.setSize(new Dimension(800, 700));
 		this.setResizable(false);
 		this.setVisible(true);
+		setLocationRelativeTo(null);
 		
 	}
 	
