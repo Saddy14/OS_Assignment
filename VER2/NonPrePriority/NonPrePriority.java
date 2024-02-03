@@ -1,8 +1,11 @@
 package NonPrePriority;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 public class NonPrePriority {
 
@@ -26,21 +29,35 @@ public class NonPrePriority {
     
     NonPrePriority() {
 
-        pList.add(new Process("P0",6,0,3));
-        pList.add(new Process("P1",4,1,3));
-        pList.add(new Process("P2",6,5,1));
-        pList.add(new Process("P3",6,6,1));
-        pList.add(new Process("P4",6,7,5));
-        pList.add(new Process("P5",6,8,6));
+        // from assignment pdf
+        // pList.add(new Process("P0",6,0,3));
+        // pList.add(new Process("P1",4,1,3));
+        // pList.add(new Process("P2",6,5,1));
+        // pList.add(new Process("P3",6,6,1));
+        // pList.add(new Process("P4",6,7,5));
+        // pList.add(new Process("P5",6,8,6));
 
+
+        // pList.add(new Process("P0",3,0,4));
+        // pList.add(new Process("P4",4,1,2));
+        // pList.add(new Process("P2",2,2,1));
+        // pList.add(new Process("P3",3,2,3));
+        // pList.add(new Process("P1",1,6,1));
+        // pList.add(new Process("P0",3,8,6));
+
+        // pList.add(new Process("P1",3,2,3));
+        // pList.add(new Process("P2",4,5,5));
+        // pList.add(new Process("P3",5,1,1));
+        // pList.add(new Process("P4",2,0,4));
+        // pList.add(new Process("P5",1,3,2));
         
         calTotalBrust(); //! Calculate Total Burst Time
         sortByArrival(pList, totalBurst); GanttChar.setSortAT(queue);
         magic();
         // System.out.println(pList);
         calTurnAround(); //Calculate TurnAround for each Process
-        calTAT(); //Total & Avg TurnAround Time
         waitingTime(); //Calculate Waiting Time for each Process
+        calTAT(); //Total & Avg TurnAround Time
         avgWaitingTime(); //Total & Avg Waiting Time
         System.out.println("\n"+pDone);
         System.out.println("TTAT: " + totalTurnAround + " Avg TAT: " + avgTurnAround);
@@ -56,38 +73,92 @@ public class NonPrePriority {
 
     }
 
-    //TODO Make it return queue & make parameter queue as well 
-    private Queue<Process> sortByPriority(Queue<Process> queue) {
+    // private Queue<Process> sortByPriority(Queue<Process> queue) {
+    //     List<Process> temp = new ArrayList<>(queue);
+    //     queue.clear();
+    
+    //     temp.sort((p1, p2) -> {
+    //         if (p1.getPriority() == p2.getPriority()) {
+    //             if (p1.getArrivalTime() == p2.getArrivalTime()) {
+    //                 return p1.getBrustTime() - p2.getBrustTime(); // sort by burst time if priorities and arrival times are the same
+    //             }
+    //             return p1.getArrivalTime() - p2.getArrivalTime(); // sort by arrival time if priorities are the same
+    //         }
+    //         return p1.getPriority() - p2.getPriority();
+    //     });
+    
+    //     queue.addAll(temp);
+    //     return queue;
+    // }
 
-        int x = 1; //! Priority 1 compare to all other process Priority Level...so forth
+    
 
-        List<Process> temp = new ArrayList<>();
-        temp.addAll(queue);
+    private Queue<Process> sortByArrival(List<Process> pList, int totalBurst) {
         queue.clear();
-
-        for (int i = 0; i < 25 /*temp.size()*/; i++) {
-
-            // for (int j = 0; j < temp.size(); j++) {
-
-            //     if ((x) == temp.get(j).getPriority()) {
-            //         queue.offer(temp.get(j));
-            //     }
-            // }
-            for (Process process : temp) {
-
-                if ((x) == process.getPriority()) {
-                    queue.offer(process);
+    
+        pList.sort((p1, p2) -> {
+            if (p1.getArrivalTime() == p2.getArrivalTime()) {
+                if (p1.getPriority() == p2.getPriority()) {
+                    return p1.getBrustTime() - p2.getBrustTime(); // sort by burst time if arrival times and priorities are the same
                 }
-
+                return p1.getPriority() - p2.getPriority(); // sort by priority if arrival times are the same
             }
-            x++;
-        }  
-        // queue.clear();
-        // System.out.println(queue);
+            return p1.getArrivalTime() - p2.getArrivalTime();
+        });
+    
+        queue.addAll(pList);
         return queue;
     }
 
 
+    
+
+    private void magic() {
+        int brust = 0;
+    
+        while (brust <= totalBurst) {
+            queue = sortByPriorityAndArrival(pList, brust);
+    
+            Process temp = queue.poll();
+            if (temp == null) {
+                break;
+            }
+    
+            // If the current time is less than the arrival time of the process,
+            // increment the current time to the arrival time of the process.
+            if (brust < temp.getArrivalTime()) {
+                brust = temp.getArrivalTime();
+            }
+    
+            int startTime = brust;
+            brust += temp.getBrustTime();
+            temp.setFinishTime(brust);
+    
+            Process doneProcess = new Process(temp.getpNumber(), temp.getPriority(), temp.getArrivalTime(), temp.getBrustTime());
+            doneProcess.setFinishTime(brust);
+            doneProcess.setStartTime(startTime); // Set the start time
+            pDone.add(doneProcess);
+    
+            Iterator<Process> iterator = pList.iterator();
+            while (iterator.hasNext()) {
+                Process process = iterator.next();
+                if (process.getpNumber().equals(temp.getpNumber())) {
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
+    }
+
+    private Queue<Process> sortByPriorityAndArrival(List<Process> list, int brust) {
+        return list.stream()
+                .filter(p -> p.getArrivalTime() <= brust)
+                .sorted(Comparator.comparing(Process::getPriority).thenComparing(Process::getArrivalTime))
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+
+    
 
     private void calTotalBrust() {
 
@@ -95,65 +166,6 @@ public class NonPrePriority {
            totalBurst += process.getBrustTime();
         }
         System.out.println("Total Burst Time: " + totalBurst);
-    }
-
-    
-
-    private Queue<Process> sortByArrival(List<Process> pList, int totalBurst) { //Sort by Arrival Time
-
-        queue.clear();
-
-        for (int i = 0; i < totalBurst; i++) {
-
-            for (int j = 0; j < pList.size(); j++) {
-
-                if ((i) == pList.get(j).getArrivalTime()) {
-                    queue.offer(pList.get(j));
-                }
-            }
-        }  
-        
-        
-        // System.out.println("i am from sortbyArrival " + queue.size());
-        return queue;
-    }
-
-    private void magic() {
-
-        int brust = 0;
-
-        while (brust <= totalBurst) {
-
-            Process temp = queue.poll();
-            if (temp == null) {
-                break;
-            }
-
-            if (queue.peek() != null) { //Same arrival time but different Priority
-
-                if (temp.getPriority() > queue.peek().getPriority()) {
-                    Process putBackProcess = temp;
-                    temp = queue.poll();
-                    queue.offer(putBackProcess);
-                }
-                // else
-                // continue;
-            }
-            
-
-            brust += temp.getBrustTime();
-            // System.out.println(brust+"I am inner Brust");
-            temp.setFinishTime(brust);
-
-            // System.out.println(pList.contains(temp));
-            pDone.add(temp);
-            pList.remove(temp);
-            queue = sortByArrival(pList, brust);
-            queue = sortByPriority(queue);
-
-        }
-        // System.out.println(pDone+ " magic");
-
     }
 
     private void calTurnAround() {

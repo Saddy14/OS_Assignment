@@ -1,5 +1,15 @@
 package NonPrePriority;
 public class Process {
+
+    private int startTime;
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getWaitingTime() {
+        return startTime - getArrivalTime();
+    }
     
     private static int pIdCounter;
     private int pId;
@@ -83,9 +93,9 @@ public class Process {
         this.turnAroundTime = turnAroundTime;
     }
 
-    public int getWaitingTime() {
-        return waitingTime;
-    }
+    // public int getWaitingTime() {
+    //     return waitingTime;
+    // }
 
     public void setWaitingTime(int waitingTime) {
         this.waitingTime = waitingTime;

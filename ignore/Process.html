@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CPU Process Scheduling</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <h1>Non-Preemptive Priority CPU Process Scheduling</h1>
+    <form id="schedulingForm">
+        <div id="processes">
+            <!-- Initial 3 processes -->
+            <div class="process">
+                <label>Process Name:</label> <input type="text" class="name">
+                Burst Time <input type="number" class="burst">
+                Priority <input type="number" class="priority">
+                Arrival Time <input type="number" class="arrival">
+            </div>
+            <!-- Repeat for other processes -->
+        </div>
+        <button type="button" id="addProcess">Add a new process</button>
+        <input type="submit" value="Calculate">
+    </form>
+    <div id="results"></div>
+    <script src="scheduling.js"></script>
+</body>
+</html>

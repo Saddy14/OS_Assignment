@@ -4,10 +4,7 @@ public class Main {
 
         // new NonPrePriority();
         new Gui();
-        // pew.start();
-
-        // double temp = 93/6d;
-        // System.out.println(temp);
+        
 
         
         
